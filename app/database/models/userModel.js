@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const UserSchema = mongoose.Schema(
   {
@@ -26,6 +26,7 @@ const UserSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
     profileViews: {
       type: Number,
       default: 0,
@@ -48,15 +49,21 @@ const UserSchema = mongoose.Schema(
       type: String,
       default: "",
     },
-    socialLinks: {
+    instagram: {
       type: String,
-      min: 3,
-      max: 50,
-      required: true,
+      default: "",
+    },
+    telegram: {
+      type: String,
+      default: "",
+    },
+    twitter: {
+      type: String,
+      default: "",
     },
   },
   { timeStamps: true }
 );
 
-const User = mongoose.model("User", UserSchema);
-export default User;
+const userModel = mongoose.models.users || mongoose.model("users", UserSchema);
+export default userModel;

@@ -1,10 +1,14 @@
 import User from "@/app/database/models/userModel";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import uploadImg from "@/helpers/uploadImage";
+import connectDB from "@/db/connectDB";
 
-async function POST(req) {
+connectDB();
+
+export async function POST(req) {
   try {
-    const formData = req.formData();
+    const formData = await req.formData();
     const fullName = formData.get("fullName");
     const username = formData.get("username");
     const password = formData.get("password");
@@ -15,7 +19,9 @@ async function POST(req) {
     const location = formData.get("location");
     const occupation = formData.get("occupation");
     const bio = formData.get("bio");
-    const socialLinks = formData.get("socialLinks");
+    const instagram = formData.get("instagram");
+    const telegram = formData.get("telegram");
+    const twitter = formData.get("twitter");
 
     //Check email
     const emailCheck = await User.findOne({ email });
@@ -24,9 +30,33 @@ async function POST(req) {
     }
 
     //Hash the password
-    const salt = bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    //Upload profilePic in cloudnary
+    const uploadProfilePic = await uploadImg(profilePic);
+
+    const payload = {
+      fullName,
+      username,
+      password: hashedPassword,
+      email,
+      profilePic: uploadProfilePic,
+      profileViews,
+      profileImpression,
+      location,
+      occupation,
+      bio,
+      instagram,
+      telegram,
+      twitter,
+    };
+
+    const user = new User(payload);
+    const newUser = await user.save();
+
+    return NextResponse.json({ message: "User created", data: newUser });
   } catch (error) {
-    NextResponse.json({ message: error.message || error });
+    return NextResponse.json({ message: error.message || error });
   }
 }
