@@ -14,14 +14,14 @@ export async function POST(req) {
     const password = formData.get("password");
     const email = formData.get("email");
     const profilePic = formData.get("profilePic");
-    const profileViews = formData.get("profileViews");
-    const profileImpression = formData.get("profileImpression");
-    const location = formData.get("location");
-    const occupation = formData.get("occupation");
-    const bio = formData.get("bio");
-    const instagram = formData.get("instagram");
-    const telegram = formData.get("telegram");
-    const twitter = formData.get("twitter");
+    // const profileViews = formData.get("profileViews");
+    // const profileImpression = formData.get("profileImpression");
+    // const location = formData.get("location");
+    // const occupation = formData.get("occupation");
+    // const bio = formData.get("bio");
+    // const instagram = formData.get("instagram");
+    // const telegram = formData.get("telegram");
+    // const twitter = formData.get("twitter");
 
     //Check email
     const emailCheck = await User.findOne({ email });
@@ -42,14 +42,14 @@ export async function POST(req) {
       password: hashedPassword,
       email,
       profilePic: uploadProfilePic,
-      profileViews,
-      profileImpression,
-      location,
-      occupation,
-      bio,
-      instagram,
-      telegram,
-      twitter,
+      // profileViews,
+      // profileImpression,
+      // location,
+      // occupation,
+      // bio,
+      // instagram,
+      // telegram,
+      // twitter,
     };
 
     const user = new User(payload);

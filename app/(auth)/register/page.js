@@ -4,15 +4,54 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/Logo.png";
 import Bg from "@/public/Img.jpeg";
-import { TextInput, CustomButton, Loading } from "@/app/components";
+import { CustomButton, Loading } from "@/app/components";
 import { BsShare } from "react-icons/bs";
 import { ImConnection } from "react-icons/im";
 import { AiOutlineInteraction } from "react-icons/ai";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Register() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    fullName: "",
+    username: "",
+    email: "",
+    password: "",
+    profilePic: "",
+  });
+  const [img, setImg] = useState(null);
+  const inputFileRef = useRef();
 
+  const handleChange = (e) => {
+    setData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleOpenFileUploader = () => {
+    inputFileRef.current.click();
+  };
+
+  const handleImgChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImg(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    setData((prev) => {
+      return {
+        ...prev,
+        profilePic: file,
+      };
+    });
+  };
+
+  console.log("data", data);
   return (
     <div className=" w-full h-[100vh] flex items-center justify-center p-6">
       <div className="w-full md:w-2/3 h-fit lg:h-full 2xl:h-5/6 py-8 lg:py-0 flex  rounded-xl overflow-hidden border border-black/10 items-center justify-center">
@@ -33,38 +72,80 @@ export default function Register() {
 
           <form className="py-8 flex flex-col gap-5">
             <div className="w-full flex flex-col lg:flex-row gap-1 md:gap-2">
-              <TextInput
-                name="fullName"
-                placeholder="Full Name"
-                label="Full Name"
-                type="text"
-                styles="w-full  p-2 border"
-              />
+              <div className="w-full flex flex-col mt-2">
+                <div>
+                  <p className="text-ascent-2 text-sm mb-2">FullName</p>
+                  <input
+                    className="transition-all duration-[300ms] ease-out bg-secondary rounded px-2 border-[#66666690] outline-none text-sm text-ascent-1  placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#258dee] focus:border-transparent w-full p-2 border"
+                    name="fullName"
+                    placeholder="Full Name"
+                    type="text"
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-              <TextInput
-                name="username"
-                placeholder="Username"
-                label="Username"
-                type="text"
-                styles="w-full  p-2 border"
-              />
+              <div className="w-full flex flex-col mt-2">
+                <div>
+                  <p className="text-ascent-2 text-sm mb-2">Username</p>
+                  <input
+                    className="transition-all duration-[300ms] ease-out bg-secondary rounded px-2 border-[#66666690] outline-none text-sm text-ascent-1  placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#258dee] focus:border-transparent w-full p-2 border"
+                    name="username"
+                    placeholder="Username"
+                    type="text"
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
             </div>
-            <TextInput
-              name="email"
-              placeholder="email@example.com"
-              label="Email Address"
-              type="email"
-              styles="w-full  p-2 border"
-            />
-            <TextInput
-              name="password"
-              placeholder="Password"
-              label="Password"
-              type="password"
-              styles="w-full  p-2 border"
-            />
+            <div className="w-full flex flex-col mt-2">
+              <div>
+                <p className="text-ascent-2 text-sm mb-2">Email</p>
+                <input
+                  className="transition-all duration-[300ms] ease-out bg-secondary rounded px-2 border-[#66666690] outline-none text-sm text-ascent-1  placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#258dee] focus:border-transparent w-full p-2 border"
+                  name="email"
+                  placeholder="example@gmail.com"
+                  type="email"
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+            <div className="w-full flex flex-col mt-2">
+              <div>
+                <p className="text-ascent-2 text-sm mb-2">Password</p>
+                <input
+                  className="transition-all duration-[300ms] ease-out bg-secondary rounded px-2 border-[#66666690] outline-none text-sm text-ascent-1  placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#258dee] focus:border-transparent w-full p-2 border"
+                  name="password"
+                  placeholder="Password"
+                  type="passowrd"
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+              </div>
+            </div>
 
-            {isSubmitting ? (
+            <div className="w-full flex flex-col mt-2">
+              <div onClick={handleOpenFileUploader}>
+                <label
+                  htmlFor="profilePic"
+                  className="cursor-pointer rounded px-2 border-[#258dee] text-[#258dee] text-sm w-full p-2 border "
+                  ref={inputFileRef}
+                >
+                  Upload Profile Pic
+                </label>
+                <input
+                  className="hidden"
+                  id="profilePic"
+                  type="file"
+                  onChange={handleImgChange}
+                />
+              </div>
+            </div>
+
+            {loading ? (
               <Loading />
             ) : (
               <CustomButton
@@ -89,11 +170,21 @@ export default function Register() {
         {/* RIGHT */}
         <div className="hidden w-1/2 h-full lg:flex flex-col items-center justify-center bg-blue-500">
           <div className="relative w-full flex items-center justify-center">
-            <Image
-              src={Bg}
-              alt="Cover"
-              className="w-48 2xl:w-64 h-48 2xl:h-64 rounded-full object-cover"
-            />
+            {img ? (
+              <Image
+                src={img}
+                alt="Cover"
+                className="w-48 2xl:w-64 h-48 2xl:h-64 rounded-full object-cover"
+                width={50}
+                height={50}
+              />
+            ) : (
+              <Image
+                src={Bg}
+                alt="Cover"
+                className="w-48 2xl:w-64 h-48 2xl:h-64 rounded-full object-cover"
+              />
+            )}
 
             <div className="absolute flex items-center gap-1 bg-white right-10 top-10 py-2 px-5 rounded-full">
               <BsShare size={14} />
