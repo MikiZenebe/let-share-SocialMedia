@@ -32,7 +32,11 @@ export async function POST(req) {
       expiresIn: "3d",
     });
 
-    const res = NextResponse.json({ token: token });
+    const res = NextResponse.json({
+      message: "User logged in",
+      token: token,
+      success: true,
+    });
 
     const cookiesOption = {
       httpOnly: true,

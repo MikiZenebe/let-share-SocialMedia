@@ -68,7 +68,7 @@ export default function Register() {
       formData.set("profilePic", data.profilePic);
 
       const res = await axios.post("/api/register", formData);
-      toast.success("User registerd 🚀👨");
+      toast.success(res.data.message + "🚀👨");
 
       if (res.status === 200) {
         setData({
@@ -82,10 +82,10 @@ export default function Register() {
         navigate.push("/login");
       }
 
-      setIsSubmitting(false);
+      setLoading(false);
     } catch (error) {
       toast.error(error);
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
@@ -99,7 +99,7 @@ export default function Register() {
               <Image src={Logo} alt="" />
             </div>
             <span className="text-2xl text-[#258dee] font-semibold">
-              WeShare
+              LetShare
             </span>
           </div>
 

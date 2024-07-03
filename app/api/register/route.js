@@ -55,7 +55,11 @@ export async function POST(req) {
     const user = new User(payload);
     const newUser = await user.save();
 
-    return NextResponse.json({ message: "User created", data: newUser });
+    return NextResponse.json({
+      message: "User created",
+      data: newUser,
+      success: true,
+    });
   } catch (error) {
     return NextResponse.json({ message: error.message || error });
   }
