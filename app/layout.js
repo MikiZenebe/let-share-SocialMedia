@@ -1,4 +1,6 @@
+import Hydrate from "./components/Hydrate";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Create Next App",
@@ -8,7 +10,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <Hydrate>
+        <body>
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 1500,
+            }}
+          />
+          {children}
+        </body>
+      </Hydrate>
     </html>
   );
 }

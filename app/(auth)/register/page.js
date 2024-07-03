@@ -9,6 +9,9 @@ import { BsShare } from "react-icons/bs";
 import { ImConnection } from "react-icons/im";
 import { AiOutlineInteraction } from "react-icons/ai";
 import { useRef, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +24,7 @@ export default function Register() {
   });
   const [img, setImg] = useState(null);
   const inputFileRef = useRef();
+  const navigate = useRouter();
 
   const handleChange = (e) => {
     setData((prev) => ({
@@ -51,7 +55,40 @@ export default function Register() {
     });
   };
 
-  console.log("data", data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.set("fullName", data.fullName);
+      formData.set("username", data.username);
+      formData.set("email", data.email);
+      formData.set("password", data.password);
+      formData.set("profilePic", data.profilePic);
+
+      const res = await axios.post("/api/register", formData);
+      toast.success("User registerd 🚀👨");
+
+      if (res.status === 200) {
+        setData({
+          fullName: "",
+          username: "",
+          email: "",
+          password: "",
+          profilePic: "",
+        });
+
+        navigate.push("/login");
+      }
+
+      setIsSubmitting(false);
+    } catch (error) {
+      toast.error(error);
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className=" w-full h-[100vh] flex items-center justify-center p-6">
       <div className="w-full md:w-2/3 h-fit lg:h-full 2xl:h-5/6 py-8 lg:py-0 flex  rounded-xl overflow-hidden border border-black/10 items-center justify-center">
@@ -70,7 +107,7 @@ export default function Register() {
             Create your account
           </p>
 
-          <form className="py-8 flex flex-col gap-5">
+          <form className="py-6 flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="w-full flex flex-col lg:flex-row gap-1 md:gap-2">
               <div className="w-full flex flex-col mt-2">
                 <div>
