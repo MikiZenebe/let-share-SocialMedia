@@ -11,6 +11,7 @@ import {
 } from "react-icons/io";
 import { BsCardChecklist, BsSunFill } from "react-icons/bs";
 import Logo from "../../public/Logo.png";
+import { headerNavLink } from "../../utils";
 
 export default function Header() {
   const modalRef = useRef();
@@ -59,17 +60,24 @@ export default function Header() {
 
       {/* Dark an Light */}
 
-      <div className="flex items-center gap-3">
-        <div className="hidden lg:flex p-[4px] rounded-md gap-4">
-          <IoMdNotificationsOutline size={22} color="#258dee" />
-        </div>
-        <h1 className="text-ascent-2 font-medium">Miki</h1>
-        <div ref={modalRef} className="cursor-pointer">
+      <div className="flex items-center gap-8">
+        {headerNavLink.map((link, i) => {
+          return (
+            <div className="flex flex-col items-center" key={i}>
+              <p>{link.iconUrl}</p>
+              <p>{link.label}</p>
+            </div>
+          );
+        })}
+
+        {/* Current user login image */}
+        <div>
           <Image
-            src={Logo}
+            className="rounded-full object-cover w-10 h-10"
+            src={"/img.jpeg"}
             alt="user"
-            className="w-[40px] h-[40px] rounded-full object-cover"
-            onClick={() => setToggle(!toggle)}
+            width={40}
+            height={50}
           />
         </div>
       </div>
