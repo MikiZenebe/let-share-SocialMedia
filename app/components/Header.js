@@ -4,12 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import CustomButton from "./CustomButton";
-import {
-  IoIosSettings,
-  IoMdHelp,
-  IoMdNotificationsOutline,
-} from "react-icons/io";
-import { BsCardChecklist, BsSunFill } from "react-icons/bs";
+import { IoMdMenu, IoMdClose } from "react-icons/io";
 import Logo from "../../public/Logo.png";
 import { headerNavLink } from "../../utils";
 
@@ -60,13 +55,17 @@ export default function Header() {
 
       {/* Dark an Light */}
 
-      <div className="flex items-center gap-8">
+      <div className="items-center gap-8 hidden md:flex">
         {headerNavLink.map((link, i) => {
           return (
-            <div className="flex flex-col items-center" key={i}>
+            <Link
+              href={link.route}
+              className="flex flex-col items-center"
+              key={i}
+            >
               <p>{link.iconUrl}</p>
               <p>{link.label}</p>
-            </div>
+            </Link>
           );
         })}
 
@@ -82,38 +81,39 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Menu */}
+
+      <div
+        className="flex md:hidden cursor-pointer"
+        onClick={() => setToggle(!toggle)}
+      >
+        {toggle ? <IoMdClose size={25} /> : <IoMdMenu size={25} />}
+      </div>
+
       <div
         className={`bg-white flex flex-col gap-2  ${
           !toggle ? "hidden" : "flex"
-        } p-6 bg-white border border-gray-300  absolute top-20 right-0 mx-4 my-2 min-w-[250px] rounded-xl dropDown`}
+        } md:hidden p-6 bg-white border border-gray-300  absolute top-20 right-0 mx-4 my-2 min-w-[300px] rounded-xl dropDown`}
       >
-        <div className="flex flex-col gap-6  text-ascent-1 text-md md:text-xl">
-          <div className="flex items-center justify-between">
-            <p className="font-bold text-[20px] mb-3">Profile</p>
-          </div>
-          <hr className="border-ascent-2" />
-          <Link href={`/profile/user`} className="flex items-center gap-2">
-            <BsCardChecklist color="#258dee" />
-            <span className="">My Profile</span>
-          </Link>
+        <div className="gap-5 flex flex-col">
+          {headerNavLink.map((link, i) => {
+            return (
+              <Link
+                href={link.route}
+                className="flex  items-center gap-2"
+                key={i}
+              >
+                <p>{link.iconUrl}</p>
+                <p>{link.label}</p>
+              </Link>
+            );
+          })}
 
-          <button className="flex items-center gap-2">
-            <IoIosSettings color="#258dee" />
-            <span className="">Settings</span>
-          </button>
-
-          <p className="flex items-center gap-2">
-            <IoMdHelp color="#258dee" />
-            <span className="">Help</span>
-          </p>
-          <hr className="mt-2 border-ascent-2" />
-
+          {/* Current user login image */}
           <div>
-            <CustomButton
-              title="Logout"
-              type="submit"
-              containerStyle="bg-[#258dee] text-white px-4 md:px-6 py-1 md:py-2 rounded-md"
-            />
+            <button className="bg-blue-500 w-full p-1.5 text-white font-semibold rounded">
+              Logout
+            </button>
           </div>
         </div>
       </div>
