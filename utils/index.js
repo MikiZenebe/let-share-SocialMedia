@@ -1,22 +1,22 @@
-import { AiFillHome } from "react-icons/ai";
-import { BiSolidUser, BiSolidUserPlus } from "react-icons/bi";
-import { IoMdNotifications } from "react-icons/io";
+import { AiOutlineHome } from "react-icons/ai";
+import { BiUser } from "react-icons/bi";
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 export const headerNavLink = [
   {
     label: "Home",
-    iconUrl: <AiFillHome size={20} />,
+    iconUrl: <AiOutlineHome size={20} />,
     route: "/",
   },
 
   {
     label: "Find Friends",
-    iconUrl: <BiSolidUserPlus size={25} />,
-    route: "/findFriends",
+    iconUrl: <BiUser size={22} />,
+    route: "/find-friends",
   },
   {
     label: "Notification",
-    iconUrl: <IoMdNotifications size={25} />,
+    iconUrl: <IoMdNotificationsOutline size={22} />,
     route: "/notification",
   },
 ];

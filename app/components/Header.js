@@ -7,8 +7,11 @@ import CustomButton from "./CustomButton";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import Logo from "../assets/Logo.png";
 import { headerNavLink } from "../../utils";
+import { SearchIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const path = usePathname();
   const modalRef = useRef();
   const [toggle, setToggle] = useState(false);
 
@@ -30,7 +33,7 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="topbar w-full flex items-center justify-between py-5 lg:px-10 md:py-4 px-4 bg-primary shadow-sm backdrop-blur-md ">
+    <div className="topbar w-full flex items-center justify-between py-5 lg:px-10 md:py-4 px-4 bg-white  backdrop-blur-md ">
       <Link href="/" className="flex gap-2 items-center">
         <div className="w-6 rounded">
           <Image src={Logo} alt="" />
@@ -47,32 +50,39 @@ export default function Header() {
           styles="w-[18rem] lg:w-[20rem] rounded-l-full  border border-gray-300"
         />
         <CustomButton
-          title="Search"
+          title={<SearchIcon />}
           type="submit"
-          containerStyle="bg-[#258dee] text-white px-6 py-2  rounded-r-full"
+          containerStyle="bg-[#258dee] text-white px-2 py-[7px] rounded-r-full"
         />
       </form>
 
       {/* Dark an Light */}
 
-      <div className="items-center gap-8 hidden md:flex">
+      <div className="items-center gap-4 hidden md:flex">
         {headerNavLink.map((link, i) => {
+          const isActive = path === link.route;
+
           return (
             <Link
               href={link.route}
               className="flex flex-col items-center"
               key={i}
             >
-              <p>{link.iconUrl}</p>
-              <p>{link.label}</p>
+              <p
+                className={`text-gray-500 ${
+                  isActive && "text-[#1B78E6] border-b-[1px] border-[#1B78E6]"
+                }`}
+              >
+                {link.iconUrl}
+              </p>
             </Link>
           );
         })}
 
         {/* Current user login image */}
-        <div>
+        <div className="flex items-center">
           <Image
-            className="rounded-full object-cover w-10 h-10"
+            className="rounded-full object-cover w-6 h-6"
             src={"/img.jpeg"}
             alt="user"
             width={40}
