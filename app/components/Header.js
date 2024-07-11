@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import CustomButton from "./CustomButton";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
-import Logo from "../../public/Logo.png";
+import Logo from "../assets/Logo.png";
 import { headerNavLink } from "../../utils";
 
 export default function Header() {

@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "@/public/Logo.png";
-import Bg from "@/public/Img.jpeg";
-import { CustomButton, Loading } from "@/app/components";
+import Logo from "../../assets/Logo.png";
+import Bg from "../../assets/Img.jpeg";
+import { CustomButton, Loading } from "../../components";
 import { BsShare } from "react-icons/bs";
 import { ImConnection } from "react-icons/im";
 import { AiOutlineInteraction } from "react-icons/ai";
