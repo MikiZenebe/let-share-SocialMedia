@@ -14,6 +14,7 @@ export default function Header() {
   const path = usePathname();
   const modalRef = useRef();
   const [toggle, setToggle] = useState(false);
+  const [userToggle, setUserToggle] = useState(false);
 
   useEffect(() => {
     // Add event listener to close modal when clicking outside of it
@@ -70,7 +71,8 @@ export default function Header() {
             >
               <p
                 className={`text-gray-500 ${
-                  isActive && "text-[#1B78E6] border-b-[1px] border-[#1B78E6]"
+                  isActive &&
+                  "bg-[#1B78E6] text-white p-2 transition-all duration-300 ease-in-out rounded-full border-b-[1px] border-[#1B78E6]"
                 }`}
               >
                 {link.iconUrl}
@@ -82,7 +84,8 @@ export default function Header() {
         {/* Current user login image */}
         <div className="flex items-center">
           <Image
-            className="rounded-full object-cover w-6 h-6"
+            onClick={() => setUserToggle(!toggle)}
+            className="rounded-full object-cover w-6 h-6 cursor-pointer"
             src={"/img.jpeg"}
             alt="user"
             width={40}
@@ -104,6 +107,35 @@ export default function Header() {
         className={`bg-white flex flex-col gap-2  ${
           !toggle ? "hidden" : "flex"
         } md:hidden p-6 bg-white border border-gray-300  absolute top-20 right-0 mx-4 my-2 min-w-[300px] rounded-xl dropDown`}
+      >
+        <div className="gap-5 flex flex-col">
+          {headerNavLink.map((link, i) => {
+            return (
+              <Link
+                href={link.route}
+                className="flex  items-center gap-2"
+                key={i}
+              >
+                <p>{link.iconUrl}</p>
+                <p>{link.label}</p>
+              </Link>
+            );
+          })}
+
+          {/* Current user login image */}
+          <div>
+            <button className="bg-blue-500 w-full p-1.5 text-white font-semibold rounded">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* User Toggle */}
+      <div
+        className={`bg-white flex flex-col gap-2  ${
+          !userToggle ? "hidden" : "flex"
+        }  p-6 bg-white border border-gray-300  absolute top-20 right-0 mx-4 my-2 min-w-[300px] rounded-xl dropDown`}
       >
         <div className="gap-5 flex flex-col">
           {headerNavLink.map((link, i) => {
