@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import CustomButton from "./CustomButton";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
@@ -9,6 +10,7 @@ import Logo from "../assets/Logo.png";
 import { headerNavLink } from "../../utils";
 import { SearchIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function Header() {
   const path = usePathname();
@@ -20,7 +22,7 @@ export default function Header() {
     // Add event listener to close modal when clicking outside of it
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setToggle(false);
+        setUserToggle(false);
       }
     };
 
@@ -32,6 +34,11 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handelLogout = async () => {
+    const res = await axios.get("/api/logout");
+    toast.success(res.data.message);
+  };
 
   return (
     <div className="topbar w-full flex items-center justify-between py-5 lg:px-10 md:py-4 px-4 bg-white  backdrop-blur-md ">
@@ -57,8 +64,6 @@ export default function Header() {
         />
       </form>
 
-      {/* Dark an Light */}
-
       <div className="items-center gap-4 hidden md:flex">
         {headerNavLink.map((link, i) => {
           const isActive = path === link.route;
@@ -82,9 +87,9 @@ export default function Header() {
         })}
 
         {/* Current user login image */}
-        <div className="flex items-center">
+        <div ref={modalRef} className="flex items-center">
           <Image
-            onClick={() => setUserToggle(!toggle)}
+            onClick={() => setUserToggle(!userToggle)}
             className="rounded-full object-cover w-6 h-6 cursor-pointer"
             src={"/img.jpeg"}
             alt="user"
@@ -110,10 +115,14 @@ export default function Header() {
       >
         <div className="gap-5 flex flex-col">
           {headerNavLink.map((link, i) => {
+            const isActive = path === link.route;
             return (
               <Link
                 href={link.route}
-                className="flex  items-center gap-2"
+                className={`flex  items-center gap-2 ${
+                  isActive &&
+                  "bg-[#1B78E6] p-2 rounded text-white transition-all duration-300 ease-in-out"
+                }`}
                 key={i}
               >
                 <p>{link.iconUrl}</p>
@@ -124,7 +133,10 @@ export default function Header() {
 
           {/* Current user login image */}
           <div>
-            <button className="bg-blue-500 w-full p-1.5 text-white font-semibold rounded">
+            <button
+              onClick={handelLogout}
+              className="border text-red-500 border-red-500 w-full p-1.5 hover:bg-red-500 transition-all duration-300 ease-in-out hover:text-white font-semibold rounded"
+            >
               Logout
             </button>
           </div>
@@ -137,26 +149,31 @@ export default function Header() {
           !userToggle ? "hidden" : "flex"
         }  p-6 bg-white border border-gray-300  absolute top-20 right-0 mx-4 my-2 min-w-[300px] rounded-xl dropDown`}
       >
-        <div className="gap-5 flex flex-col">
-          {headerNavLink.map((link, i) => {
-            return (
-              <Link
-                href={link.route}
-                className="flex  items-center gap-2"
-                key={i}
-              >
-                <p>{link.iconUrl}</p>
-                <p>{link.label}</p>
-              </Link>
-            );
-          })}
-
-          {/* Current user login image */}
+        <div className="flex flex-col gap-3 justify-center items-center">
           <div>
-            <button className="bg-blue-500 w-full p-1.5 text-white font-semibold rounded">
-              Logout
-            </button>
+            <Image
+              className="rounded-full"
+              src={Logo}
+              width={40}
+              height={40}
+              alt="profile"
+            />
           </div>
+
+          <div className="flex flex-col items-center">
+            <p className="text-lg font-semibold">Mikiyas Zenebe</p>
+            <span className="text-sm text-gray-600">@username</span>
+          </div>
+        </div>
+
+        {/* Current user login image */}
+        <div>
+          <button
+            onClick={handelLogout}
+            className="bg-red-500 w-full p-1.5 text-white font-semibold rounded"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>
