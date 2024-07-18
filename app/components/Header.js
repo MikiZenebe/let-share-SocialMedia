@@ -10,9 +10,11 @@ import Logo from "../assets/Logo.png";
 import { headerNavLink } from "../../utils";
 import { SearchIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function Header() {
+  const router = useRouter();
   const path = usePathname();
   const modalRef = useRef();
   const [toggle, setToggle] = useState(false);
@@ -38,6 +40,7 @@ export default function Header() {
   const handelLogout = async () => {
     const res = await axios.get("/api/logout");
     toast.success(res.data.message);
+    router.push("/login");
   };
 
   return (
